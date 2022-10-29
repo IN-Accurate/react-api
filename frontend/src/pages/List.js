@@ -8,25 +8,28 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import { useEffect, useState } from "react";
+
+import Typography from "@mui/material/Typography";
 import axios from "axios";
 
 const columns = [
   { id: "name", label: "NAME", minWidth: 170 },
   { id: "email", label: "EMAIL", minWidth: 100 },
-  { id: "status", label: "STATUS", minWidth: 100 },
+  { id: "status", label: "STATUS", minWidth: 30, align: "center" },
 ];
 
-export default function Test() {
+export default function List() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [listOfCompanies, setListOfCompanies] = useState([]);
 
+  //https://testing-api.free.beeceptor.com/ - to test the style of 'status' when inactive
+
   useEffect(() => {
     axios.post(`http://demo2211087.mockable.io/mock`).then((response) => {
-      
-        let data = response.data.companies;
+      let data = response.data.companies;
 
-        setListOfCompanies(data);
+      setListOfCompanies(data);
     });
   }, []);
 
@@ -65,10 +68,28 @@ export default function Test() {
                     {columns.map((column, i) => {
                       const value = listOfCompanies[column.id];
                       return (
-                        <TableCell key={i} align={column.align}>
-                          {column.format && typeof value === "number"
-                            ? column.format(value)
-                            : value}
+                        <TableCell
+                          key={i}
+                          align={column.align}
+                          style={{
+                            backgroundColor:
+                              column.id === "status" &&
+                              ((listOfCompanies[column.id] === "active" &&
+                                "green") ||
+                                (listOfCompanies[column.id] === "inactive" &&
+                                  "grey")),
+
+                            borderRadius: column.id === "status" && 8,
+
+                            color: column.id === "status" && "white",
+                            padding: column.id === "status" && "3px ",
+                          }}
+                        >
+                          <Typography>
+                            {column.format && typeof value === "number"
+                              ? column.format(value)
+                              : value}
+                          </Typography>
                         </TableCell>
                       );
                     })}
