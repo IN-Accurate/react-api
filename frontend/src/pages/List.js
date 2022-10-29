@@ -26,7 +26,7 @@ export default function List() {
   //https://testing-api.free.beeceptor.com/ - to test the style of 'status' when inactive
 
   useEffect(() => {
-    axios.post(`http://demo2211087.mockable.io/mock`).then((response) => {
+    axios.post('https://demo2211087.mockable.io/mock').then((response) => {
       let data = response.data.companies;
 
       setListOfCompanies(data);
